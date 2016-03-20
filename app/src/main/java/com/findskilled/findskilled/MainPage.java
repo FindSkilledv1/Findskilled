@@ -520,11 +520,6 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
         pDialog.dismiss();
         finish();
     }
-public void hello()
-{
-    int i=0;
-    i--;
-}
 
 }
 //class Connect extends AsyncTask<Void,Void,Void>
