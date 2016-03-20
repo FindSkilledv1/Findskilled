@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Findskilled</string>
+    <string name="title_activity_home_page">HomePage</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="drawer_open">open</string>
+    <string name="drawer_close">close</string>
+    <string name="latitude_lable">latitude</string>
+    <string name="longitude_lable">longitude</string>
+    <string name="lastUpdateTime">lastupdatetime</string>
+    <string name="location_updated_message">updated message successfully</string>
+
+
+
+    <string-array name="service_name">
+        <item>carpenter</item>
+        <item>building construction</item>
+        <item>computer repair</item>
+        <item>doctor</item>
+        <item>driver</item>
+        <item>electrician</item>
+        <item>fabrication</item>
+        <item>mechanic</item>
+        <item>party</item>
+        <item>pathology</item>
+        <item>plumber</item>
+        <item>tailor</item>
+        <item>wedding planner</item>
+    </string-array>
+
+
+</resources>
