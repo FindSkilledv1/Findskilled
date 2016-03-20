@@ -324,7 +324,8 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
 
     @Override
     public void onConnected(Bundle bundle) {
-        Log.i(TAG, "Connected to GoogleApiClient");
+        Toast.makeText(MainPage.this,"connected to GoogleApiClient",Toast.LENGTH_LONG).show();
+//        Log.i(TAG, "Connected to GoogleApiClient");
 // If the initial location was never previously requested, we use
 // FusedLocationApi.getLastLocation() to get it. If it was previously requested, we store
 // its value in the Bundle and check for it in onCreate(). We
@@ -336,7 +337,7 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
 // moves to a new location, and then changes the device orientation, the original location
 // is displayed as the activity is re-created.
         if (mCurrentLocation == null) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+           if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
                 // here to request the missing permissions, and then overriding
@@ -519,7 +520,11 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
         pDialog.dismiss();
         finish();
     }
-
+public void hello()
+{
+    int i=0;
+    i--;
+}
 
 }
 //class Connect extends AsyncTask<Void,Void,Void>
