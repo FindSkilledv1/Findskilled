@@ -51,7 +51,8 @@
         android:layout_weight="4"
         android:textSize="20sp"
         android:padding="15dp"
-        android:selectAllOnFocus="false"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
         android:hint=" Enter your locality ..."/>
 
 </LinearLayout>

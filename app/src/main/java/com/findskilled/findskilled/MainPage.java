@@ -15,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
@@ -48,7 +49,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class MainPage extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, ResultCallback<LocationSettingsResult> {
 
  //   private Button golocation;
-    private String cityName;
+     String cityName;
     ArrayList<String> localitylist;
     AutoCompleteTextView locality;
     //bydefault keep the value as false
@@ -165,27 +166,16 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
         mGoogleApiClient.disconnect();
     }
 
-
+AutoCompleteTextView localityName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
+        localitylist=new ArrayList<>();
+        localityName=(AutoCompleteTextView)findViewById(R.id.searchlocality);
+        Connect cnct=new Connect();
+        cnct.execute();
 
-
-//       SweetAlertDialog pDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-//               .setTitleText("Are you sure?")
-//               .setContentText("Won't be able to recover this file!")
-//               .setCancelText("No,cancel plx!")
-//               .setConfirmText("Yes,delete it!")
-//               .showCancelButton(true)
-//               .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-//                   @Override
-//                   public void onClick(SweetAlertDialog sDialog) {
-//                       sDialog.cancel();
-//                   }
-//               });
-//
-//        pDialog.show();
 
 
   //      golocation = (Button) findViewById(R.id.location);
@@ -222,7 +212,7 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
             buildLocationSettingsRequest();
 
             checkLocationSettings();
-            localitylist=new ArrayList<>();
+
 
 //        golocation.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -520,46 +510,53 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
         pDialog.dismiss();
         finish();
     }
+    class Connect extends AsyncTask<Void,Void,Void>
+    {
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            ArrayAdapter<String> adapter=new ArrayAdapter<String>(MainPage.this,android.R.layout.simple_dropdown_item_1line,localitylist);
+            localityName.setAdapter(adapter);
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            ServerReq m = new ServerReq();
+            String a;
+            try {
+                a=m.getLocalityName(cityName);
+                JsonResponce(a);
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+    }
+    public void JsonResponce(String s) throws JSONException {
+
+
+
+        JSONObject json=new JSONObject(s);
+        JSONArray jarray=json.getJSONArray("user");
+
+
+        for(int i=0;i<=jarray.length();i++)
+        {
+
+            JSONObject jobj =jarray.getJSONObject(i);
+
+            localitylist.add(jobj.getString("name"));
+            localitylist.add(jobj.getString("empid"));
+
+
+        }
+
+    }
+
+
 
 }
-//class Connect extends AsyncTask<Void,Void,Void>
-//{
-//    @Override
-//    protected Void doInBackground(Void... params) {
-//        ServerReq m = new ServerReq();
-//        String a;
-//        try {
-//            a=m.getFacultyName(su_id);
-//            JsonResponce(a);
-//        } catch (Exception e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//
-//        return null;
-//    }
-//}
-//    public void JsonResponce(String s) throws JSONException {
-//
-//
-//
-//        JSONObject json=new JSONObject(s);
-//        JSONArray jarray=json.getJSONArray("user");
-//
-//
-//        for(int i=0;i<=jarray.length();i++)
-//        {
-//
-//            JSONObject jobj =jarray.getJSONObject(i);
-//
-//            facname.add(jobj.getString("name"));
-//            facname.add(jobj.getString("empid"));
-//            facname.add(jobj.getString("emailid"));
-//            facname.add(jobj.getString("contact"));
-//            facname.add(jobj.getString("designation"));
-//
-//
-//        }
-//
-//    }
 
