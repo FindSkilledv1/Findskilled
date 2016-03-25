@@ -8,6 +8,8 @@ import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,21 +35,26 @@ public class HomePage extends AppCompatActivity {
     private static int NUM_PAGES = 0;
     private static final Integer[] IMAGES={R.drawable.find2,R.drawable.find1,R.drawable.find3};
     private ArrayList<Integer> ImagesArray = new ArrayList<Integer>();
-    private GridView service;
+    private RecyclerView service;
     private String[] category=null;
-
+    GridLayoutManager GridlManager;//gridView manager for RecyclerView
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_appbar);
-        service=(GridView)findViewById(R.id.serviceList);
-
+        service=(RecyclerView)findViewById(R.id.serviceList);
+        GridlManager=new GridLayoutManager(HomePage.this,2);//fist parameter for context and second for number of columns
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+        serviceDetailsAdapter adapter =new serviceDetailsAdapter(this);
+        service.setAdapter(adapter);
+        service.setLayoutManager(GridlManager);//setting the layout for recylcerView
+        service.setHasFixedSize(true);//for fix size
         category = getResources().getStringArray(R.array.service_name);
 
         SpinnerAdapter spinnerAdapter= ArrayAdapter.createFromResource(getApplicationContext(),R.array.service_name,R.layout.spinner_dropdown_item);
@@ -70,36 +77,15 @@ public class HomePage extends AppCompatActivity {
             }
         });
 
-//        NavigationDrawerFragment drawerFragment=(NavigationDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.drawer_fragment);
-//
-//        drawerFragment.setUp(R.id.drawer_fragment,(DrawerLayout)findViewById(R.id.drawer_layout), toolbar);
-//        service=(GridView)findViewById(R.id.serviceList);
-        serviceAdapter  adapter = new serviceAdapter(this);
-        service.setAdapter(adapter);
+        NavigationDrawerFragment drawerFragment=(NavigationDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.drawer_fragment);
+
+        drawerFragment.setUp(R.id.drawer_fragment,(DrawerLayout)findViewById(R.id.drawer_layout), toolbar);
+
+
         init();
-
-
-        service.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(position!=0) {
-                    Intent main = new Intent(HomePage.this, EmployeesResult.class);
-                    startActivity(main);
-                }
-
-            }
-        });
-
-
-
-
-
-
-
-
     }
     private void init() {
-  //      Toast.makeText(HomePage.this, ""+IMAGES.length, Toast.LENGTH_SHORT).show();
+  //    Toast.makeText(HomePage.this, ""+IMAGES.length, Toast.LENGTH_SHORT).show();
         mPager = (ViewPager) findViewById(R.id.pager);
         for(int i=0;i<IMAGES.length;i++) {
             ImagesArray.add(IMAGES[i]);
@@ -177,41 +163,11 @@ class ServiceImages
         this.serviceName=serviceName;
     }
 }
-//vh for view holder
-//class serviceDetailsAdapter extends RecyclerView.Adapter<serviceDetailsAdapter.myViewHolder> {
-//
-//    @Override
-//    public myViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//        return null;
-//    }
-//
-//    @Override
-//    public void onBindViewHolder(myViewHolder holder, int position) {
-//
-//    }
-//
-//    @Override
-//    public int getItemCount() {
-//        return 0;
-//    }
-//
-//
-//    class myViewHolder extends RecyclerView.ViewHolder {
-//
-//
-//        public myViewHolder(View itemView) {
-//            super(itemView);
-//        }
-//    }
-//}
-
-
-
-class serviceAdapter extends BaseAdapter
-{
+//RecyclerView adapter
+class serviceDetailsAdapter extends RecyclerView.Adapter<serviceDetailsAdapter.myViewHolder> {
     Context context;
-ArrayList<ServiceImages> list;
-    serviceAdapter(Context context)
+    ArrayList<ServiceImages> list;
+    serviceDetailsAdapter(Context context)
     {
         this.context=context;
         list=new ArrayList<ServiceImages>();
@@ -230,59 +186,45 @@ ArrayList<ServiceImages> list;
 
     }
 
+    @Override
+    public myViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_item_gridview, null);
+        myViewHolder rcv = new myViewHolder(layoutView);
+
+
+        return rcv;
+
+
+    }
 
     @Override
-    public int getCount() {
+    public void onBindViewHolder(myViewHolder holder, int position) {
+        ServiceImages temp =list.get(position);
+        holder.serviceimage.setImageResource(temp.serviceImages);
+        holder.servicename.setText(temp.serviceName);
+
+
+    }
+
+    @Override
+    public int getItemCount() {
         return list.size();
     }
 
-    @Override
-    public Object getItem(int position) {
-        return list.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    class viewHolder
-    {
+    class myViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         ImageView serviceimage;
         TextView servicename;
-        viewHolder(View v)
+        public myViewHolder(View itemView)
         {
-
-            serviceimage=(ImageView)v.findViewById(R.id.serviceimage);
-            servicename=(TextView)v.findViewById(R.id.servicename);
+            super(itemView);
+            serviceimage=(ImageView)itemView.findViewById(R.id.serviceimage);
+            servicename=(TextView)itemView.findViewById(R.id.servicename);
         }
-    }
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View row=convertView;
-        viewHolder holder=null;
-        if(row==null)
-        {
-            LayoutInflater inflator= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row=inflator.inflate(R.layout.single_item_gridview,parent,false);
-            holder=new viewHolder(row);//here row is the relative layout of  single_item_gridview.xml file which is passed in viewHolder constuctur
-            //storing the holder when the recycling stuff is done
-            // that is when again it is created
-            row.setTag(holder);// storing the object inside the view object
-
+        @Override
+        public void onClick(View v) {
         }
-        else
-        {
-            //reusing the existing object of the holder
-             holder=(viewHolder) row.getTag();
-
-        }
-        ServiceImages temp =list.get(position);
-        holder.serviceimage.setImageResource(temp.serviceImages);
-        holder.serviceimage.setTag(temp);
-        holder.servicename.setText(temp.serviceName);
-        holder.servicename.setTag(temp);
-        return row;
     }
 }
+
 

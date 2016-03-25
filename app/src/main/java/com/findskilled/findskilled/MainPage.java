@@ -119,11 +119,11 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
     @Override
     protected void onStart() {
         super.onStart();
-        pDialog  = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
-        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-        pDialog.setTitleText("Loading");
-        pDialog.setCancelable(false);
-        pDialog.show();
+//        pDialog  = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+//        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+//        pDialog.setTitleText("Loading");
+//        pDialog.setCancelable(false);
+//        pDialog.show();
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
         if (resultCode == ConnectionResult.SUCCESS) {
 // Toast.makeText(getApplicationContext(),
@@ -453,12 +453,12 @@ AutoCompleteTextView localityName;
             icd=new InternetConnectionDetector(getApplicationContext());
             isInternetPresent=icd.isConnectingToInternet();
             if(isInternetPresent) {
-                 pDialog.dismiss();
+
                 updateCityAndPincode(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
             }
             else
             {
-                pDialog.dismiss();
+
                 SweetAlertDialog pDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                         .setTitleText("Oops...")
                         .setContentText("check your internet connectivity!")
@@ -492,8 +492,8 @@ AutoCompleteTextView localityName;
             if (addresses.size() > 0)
             {
                 cityName =(""+addresses.get(0).getLocality()).toString();
-                tv_city.setText(""+addresses.get(0).getLocality());
-                Toast.makeText(MainPage.this,""+cityName,Toast.LENGTH_LONG).show();
+                tv_city.setText("" + addresses.get(0).getLocality());
+
 //                tv_pincode.setText("Pincode="+addresses.get(0).getPostalCode());
 // System.out.println(addresses.get(0).getLocality());
             }
@@ -515,6 +515,7 @@ AutoCompleteTextView localityName;
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            Toast.makeText(MainPage.this,""+cityName,Toast.LENGTH_LONG).show();
             ArrayAdapter<String> adapter=new ArrayAdapter<String>(MainPage.this,android.R.layout.simple_dropdown_item_1line,localitylist);
             localityName.setAdapter(adapter);
 
@@ -548,15 +549,12 @@ AutoCompleteTextView localityName;
 
             JSONObject jobj =jarray.getJSONObject(i);
 
-            localitylist.add(jobj.getString("name"));
-            localitylist.add(jobj.getString("empid"));
+            localitylist.add(jobj.getString("locality_name"));
+            localitylist.add(jobj.getString("locality_id"));
 
 
         }
 
     }
-
-
-
 }
 

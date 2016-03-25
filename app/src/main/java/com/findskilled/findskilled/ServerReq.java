@@ -34,6 +34,7 @@ public class ServerReq {
                 sb.append(line);
             }
             stream = sb.toString();
+
             // End reading...............
 
             // Disconnect the HttpURLConnection
