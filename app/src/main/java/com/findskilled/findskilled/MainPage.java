@@ -2,6 +2,7 @@ package com.findskilled.findskilled;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -48,8 +50,8 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class MainPage extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, ResultCallback<LocationSettingsResult> {
 
- //   private Button golocation;
-     String cityName;
+    //   private Button golocation;
+    String cityName;
     ArrayList<String> localitylist;
     AutoCompleteTextView locality;
     //bydefault keep the value as false
@@ -58,9 +60,9 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
     InternetConnectionDetector icd;
     private SweetAlertDialog pDialog;
     private Button gobtn;
-  //  private TextView txt_location;
+    //  private TextView txt_location;
 //    protected TextView txt_latitude, txt_longitude, mLastUpdateTimeTextView, tv_pincode,
-          protected TextView tv_city;
+    protected TextView tv_city;
     protected static final String TAG = "MainActivity";
 
     /**
@@ -119,18 +121,19 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
     @Override
     protected void onStart() {
         super.onStart();
-//        pDialog  = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
-//        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-//        pDialog.setTitleText("Loading");
+//        pDialog  = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYP//        pDialog.setTitleText("Loading");
 //        pDialog.setCancelable(false);
 //        pDialog.show();
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
+        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
+//below code is depriciated
+//       int resultCode=GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
+        int resultCode=googleAPI.isGooglePlayServicesAvailable(getApplicationContext());
         if (resultCode == ConnectionResult.SUCCESS) {
 // Toast.makeText(getApplicationContext(),
 // "isGooglePlayServicesAvailable SUCCESS",Toast.LENGTH_LONG).show();
             mGoogleApiClient.connect();
         } else {
-            GooglePlayServicesUtil.getErrorDialog(resultCode, this, RQS_GooglePlayServices);
+            googleAPI.getErrorDialog(this, resultCode, RQS_GooglePlayServices);
 
         }
 
@@ -166,25 +169,25 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
         mGoogleApiClient.disconnect();
     }
 
-AutoCompleteTextView localityName;
+    AutoCompleteTextView localityName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
-        localitylist=new ArrayList<>();
-        localityName=(AutoCompleteTextView)findViewById(R.id.searchlocality);
-        Connect cnct=new Connect();
-        cnct.execute();
+        localitylist = new ArrayList<>();
+        localityName = (AutoCompleteTextView) findViewById(R.id.searchlocality);
+//        Connect cnct = new Connect();
+//        cnct.execute();
 
 
-
-  //      golocation = (Button) findViewById(R.id.location);
-  //      txt_location = (TextView) findViewById(R.id.txtlocation);
+        //      golocation = (Button) findViewById(R.id.location);
+        //      txt_location = (TextView) findViewById(R.id.txtlocation);
 //        txt_latitude = (TextView) findViewById(R.id.latitude);
 //        txt_longitude = (TextView) findViewById(R.id.longitude);
 //        mLastUpdateTimeTextView = (TextView) findViewById(R.id.mlastupdatetime);
         tv_city = (TextView) findViewById(R.id.city);
-        gobtn=(Button)findViewById(R.id.go);
+        gobtn = (Button) findViewById(R.id.go);
         gobtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -205,13 +208,13 @@ AutoCompleteTextView localityName;
 //step 1
 
         //initializing the boolean value after checking the presence of internet
-            buildGoogleApiClient();
-            //step 2
-            createLocationRequest();
+        buildGoogleApiClient();
+        //step 2
+        createLocationRequest();
 //step 3
-            buildLocationSettingsRequest();
+        buildLocationSettingsRequest();
 
-            checkLocationSettings();
+        checkLocationSettings();
 
 
 //        golocation.setOnClickListener(new View.OnClickListener() {
@@ -247,6 +250,7 @@ AutoCompleteTextView localityName;
         mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
+
     //step 3
     protected void buildLocationSettingsRequest() {
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
@@ -311,10 +315,9 @@ AutoCompleteTextView localityName;
     }
 
 
-
     @Override
     public void onConnected(Bundle bundle) {
-        Toast.makeText(MainPage.this,"connected to GoogleApiClient",Toast.LENGTH_LONG).show();
+        Toast.makeText(MainPage.this, "connected to GoogleApiClient", Toast.LENGTH_LONG).show();
 //        Log.i(TAG, "Connected to GoogleApiClient");
 // If the initial location was never previously requested, we use
 // FusedLocationApi.getLastLocation() to get it. If it was previously requested, we store
@@ -327,7 +330,7 @@ AutoCompleteTextView localityName;
 // moves to a new location, and then changes the device orientation, the original location
 // is displayed as the activity is re-created.
         if (mCurrentLocation == null) {
-           if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
                 // here to request the missing permissions, and then overriding
@@ -365,18 +368,18 @@ AutoCompleteTextView localityName;
     public void onConnectionFailed(ConnectionResult connectionResult) {
 // Refer to the javadoc for ConnectionResult to see what error codes might be returned in
 // onConnectionFailed.
-               SweetAlertDialog pDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-               .setTitleText("Oops...")
-               .setContentText("Something went wrong!")
-               .setConfirmText("Ok.")
-               .showCancelButton(true)
-               .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                   @Override
-                   public void onClick(SweetAlertDialog sDialog) {
-                       sDialog.cancel();
-                       finish();
-                   }
-               });
+        SweetAlertDialog pDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("Oops...")
+                .setContentText("Something went wrong!")
+                .setConfirmText("Ok.")
+                .showCancelButton(true)
+                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        sDialog.cancel();
+                        finish();
+                    }
+                });
 
         pDialog.show();
 
@@ -389,13 +392,13 @@ AutoCompleteTextView localityName;
         final Status status = locationSettingsResult.getStatus();
         switch (status.getStatusCode()) {
             case LocationSettingsStatusCodes.SUCCESS:
-            //    Log.i(TAG, "All location settings are satisfied.");
+                //    Log.i(TAG, "All location settings are satisfied.");
                 Toast.makeText(MainPage.this, "Location is already on.", Toast.LENGTH_SHORT).show();
                 startLocationUpdates();
                 break;
             case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-            //     Log.i(TAG, "Location settings are not satisfied. Show the user a dialog to" +
-           //             "upgrade location settings ");
+                //     Log.i(TAG, "Location settings are not satisfied. Show the user a dialog to" +
+                //             "upgrade location settings ");
                 try {
 // Show the dialog by calling startResolutionForResult(), and check the result
 // in onActivityResult().
@@ -404,20 +407,21 @@ AutoCompleteTextView localityName;
 //move to step 6 in onActivityResult to check what action user has taken on settings dialog
                     status.startResolutionForResult(MainPage.this, REQUEST_CHECK_SETTINGS);
                 } catch (IntentSender.SendIntentException e) {
-             //       Log.i(TAG, "PendingIntent unable to execute request.");
+                    //       Log.i(TAG, "PendingIntent unable to execute request.");
                 }
                 break;
             case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-               // Log.i(TAG, "Location settings are inadequate, and cannot be fixed here. Dialog " +
-                 //       "not created.");
+                // Log.i(TAG, "Location settings are inadequate, and cannot be fixed here. Dialog " +
+                //       "not created.");
                 break;
         }
 
 
     }
+
     /**
-     *	This OnActivityResult will listen when
-     *	case LocationSettingsStatusCodes.RESOLUTION_REQUIRED: is called on the above OnResult
+     * This OnActivityResult will listen when
+     * case LocationSettingsStatusCodes.RESOLUTION_REQUIRED: is called on the above OnResult
      */
 //step 6:
     @Override
@@ -437,6 +441,7 @@ AutoCompleteTextView localityName;
                 break;
         }
     }
+
     /**
      * Sets the value of the UI fields for the location latitude, longitude and last update time.
      */
@@ -450,14 +455,12 @@ AutoCompleteTextView localityName;
 
 //            mLastUpdateTimeTextView.setText(String.format("%s: %s", mLastUpdateTimeLabel,
 //                    mLastUpdateTime));
-            icd=new InternetConnectionDetector(getApplicationContext());
-            isInternetPresent=icd.isConnectingToInternet();
-            if(isInternetPresent) {
+            icd = new InternetConnectionDetector(getApplicationContext());
+            isInternetPresent = icd.isConnectingToInternet();
+            if (isInternetPresent) {
 
                 updateCityAndPincode(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
-            }
-            else
-            {
+            } else {
 
                 SweetAlertDialog pDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                         .setTitleText("Oops...")
@@ -476,31 +479,27 @@ AutoCompleteTextView localityName;
             }
 
         }
-        }
+    }
+
     /**
-     *	This updateCityAndPincode method uses Geocoder api to map the latitude and longitude into city location or pincode.
-     *	We can retrieve many details using this Geocoder class.
-     *
-     And yes the Geocoder will not work unless you have data connection or wifi connected to internet.
+     * This updateCityAndPincode method uses Geocoder api to map the latitude and longitude into city location or pincode.
+     * We can retrieve many details using this Geocoder class.
+     * <p/>
+     * And yes the Geocoder will not work unless you have data connection or wifi connected to internet.
      */
-    private void updateCityAndPincode(double latitude, double longitude)
-    {
-        try
-        {
+    private void updateCityAndPincode(double latitude, double longitude) {
+        try {
             Geocoder gcd = new Geocoder(MainPage.this, Locale.getDefault());
             List<Address> addresses = gcd.getFromLocation(latitude, longitude, 1);
-            if (addresses.size() > 0)
-            {
-                cityName =(""+addresses.get(0).getLocality()).toString();
+            if (addresses.size() > 0) {
+                cityName = ("" + addresses.get(0).getLocality()).toString();
                 tv_city.setText("" + addresses.get(0).getLocality());
 
 //                tv_pincode.setText("Pincode="+addresses.get(0).getPostalCode());
 // System.out.println(addresses.get(0).getLocality());
             }
-        }
-        catch (Exception e)
-        {
-            Log.e(TAG,"exception:"+e.toString());
+        } catch (Exception e) {
+            Log.e(TAG, "exception:" + e.toString());
         }
     }
 
@@ -510,51 +509,53 @@ AutoCompleteTextView localityName;
         pDialog.dismiss();
         finish();
     }
-    class Connect extends AsyncTask<Void,Void,Void>
-    {
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            Toast.makeText(MainPage.this,""+cityName,Toast.LENGTH_LONG).show();
-            ArrayAdapter<String> adapter=new ArrayAdapter<String>(MainPage.this,android.R.layout.simple_dropdown_item_1line,localitylist);
-            localityName.setAdapter(adapter);
-
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            ServerReq m = new ServerReq();
-            String a;
-            try {
-                a=m.getLocalityName(cityName);
-                JsonResponce(a);
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-    }
-    public void JsonResponce(String s) throws JSONException {
-
-
-
-        JSONObject json=new JSONObject(s);
-        JSONArray jarray=json.getJSONArray("user");
-
-
-        for(int i=0;i<=jarray.length();i++)
-        {
-
-            JSONObject jobj =jarray.getJSONObject(i);
-
-            localitylist.add(jobj.getString("locality_name"));
-            localitylist.add(jobj.getString("locality_id"));
-
-
-        }
-
-    }
 }
+//    class Connect extends AsyncTask<Void,Void,Void>
+//    {
+//        @Override
+//        protected void onPostExecute(Void aVoid) {
+//            super.onPostExecute(aVoid);
+//            Toast.makeText(MainPage.this,""+cityName,Toast.LENGTH_LONG).show();
+//            ArrayAdapter<String> adapter=new ArrayAdapter<String>(MainPage.this,android.R.layout.simple_dropdown_item_1line,localitylist);
+//            localityName.setAdapter(adapter);
+//
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//            ServerReq m = new ServerReq();
+//            String a;
+//            try {
+//                a=m.getLocalityName(cityName);
+//                JsonResponce(a);
+//            } catch (Exception e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            }
+//
+//            return null;
+//        }
+//    }
+//    public void JsonResponce(String s) throws JSONException {
+//
+//
+//
+//        JSONObject json=new JSONObject(s);
+//        JSONArray jarray=json.getJSONArray("user");
+//
+//
+//        for(int i=0;i<=jarray.length();i++)
+//        {
+//
+//            JSONObject jobj =jarray.getJSONObject(i);
+//
+//
+//            localitylist.add(jobj.getString("id"));
+//            localitylist.add(jobj.getString("name"));
+//
+//
+//        }
+//
+//    }
+//}
 

@@ -25,6 +25,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.viewpagerindicator.CirclePageIndicator;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -38,25 +40,26 @@ public class HomePage extends AppCompatActivity {
     private RecyclerView service;
     private String[] category=null;
     GridLayoutManager GridlManager;//gridView manager for RecyclerView
-
+    serviceDetailsAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_appbar);
         service=(RecyclerView)findViewById(R.id.serviceList);
-        GridlManager=new GridLayoutManager(HomePage.this,2);//fist parameter for context and second for number of columns
+        GridlManager=new GridLayoutManager(HomePage.this,6);//fist parameter for context and second for number of columns
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        serviceDetailsAdapter adapter =new serviceDetailsAdapter(this);
+        adapter =new serviceDetailsAdapter(this,getData());//setting the adapter for recyclerView
         service.setAdapter(adapter);
         service.setLayoutManager(GridlManager);//setting the layout for recylcerView
-        service.setHasFixedSize(true);//for fix size
-        category = getResources().getStringArray(R.array.service_name);
 
+
+        category = getResources().getStringArray(R.array.service_name);
         SpinnerAdapter spinnerAdapter= ArrayAdapter.createFromResource(getApplicationContext(),R.array.service_name,R.layout.spinner_dropdown_item);
         Spinner navigationSpinner=new Spinner(getSupportActionBar().getThemedContext());
         navigationSpinner.setAdapter(spinnerAdapter);
@@ -77,17 +80,39 @@ public class HomePage extends AppCompatActivity {
             }
         });
 
-        NavigationDrawerFragment drawerFragment=(NavigationDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.drawer_fragment);
+//        NavigationDrawerFragment drawerFragment=(NavigationDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.drawer_fragment);
 
-        drawerFragment.setUp(R.id.drawer_fragment,(DrawerLayout)findViewById(R.id.drawer_layout), toolbar);
-
+//        drawerFragment.setUp(R.id.drawer_fragment,(DrawerLayout)findViewById(R.id.drawer_layout), toolbar);
 
         init();
     }
+    public static List<ServiceDetails> getData()//collection of data to display in recyclerView
+    {
+          List<ServiceDetails> data=new ArrayList<>();
+        //  Context context=null;
+
+
+        int[] serviceImages={R.drawable.carpenter,R.drawable.civil_works,R.drawable.computer_repair,
+                R.drawable.doctor,R.drawable.driver,R.drawable.electrician,R.drawable.fabrication,R.drawable.mechanic,R.drawable.weeding_planner
+        };
+       // Resources res=context.getResources();
+        //String[] serviceName=res.getStringArray(R.array.service_name);
+        String[] serviceName={"carpenter","construction","computer repair","doctor","driver","electrical","febrication","mechanic","wedding planner"};
+        for(int i=0;i<=8;i++)
+        {
+            ServiceDetails current=new ServiceDetails(serviceImages[i],serviceName[i]);
+            data.add(current);
+        }
+        return data;
+
+
+    }
+
     private void init() {
   //    Toast.makeText(HomePage.this, ""+IMAGES.length, Toast.LENGTH_SHORT).show();
         mPager = (ViewPager) findViewById(R.id.pager);
-        for(int i=0;i<IMAGES.length;i++) {
+        for(int i=0;i<IMAGES.length;i++)
+        {
             ImagesArray.add(IMAGES[i]);
 
         }
@@ -152,12 +177,12 @@ public class HomePage extends AppCompatActivity {
 
 }
 //class information as a service details
-class ServiceImages
+class ServiceDetails
 {
     int serviceImages;
     String serviceName;
 
-    ServiceImages(int serviceImages,String serviceName)
+    ServiceDetails(int serviceImages,String serviceName)
     {
         this.serviceImages=serviceImages;
         this.serviceName=serviceName;
@@ -165,44 +190,38 @@ class ServiceImages
 }
 //RecyclerView adapter
 class serviceDetailsAdapter extends RecyclerView.Adapter<serviceDetailsAdapter.myViewHolder> {
+    private LayoutInflater setLayout;
     Context context;
-    ArrayList<ServiceImages> list;
-    serviceDetailsAdapter(Context context)
+List<ServiceDetails> list= Collections.emptyList();//Collections.emptyList() for avoiding the null pointer exception
+    serviceDetailsAdapter(Context context,List<ServiceDetails> list)
     {
         this.context=context;
-        list=new ArrayList<ServiceImages>();
-        int[] serviceImages={R.drawable.carpenter,R.drawable.civil_works,R.drawable.computer_repair,
-                R.drawable.doctor,R.drawable.driver,R.drawable.electrician,R.drawable.fabrication,
-                R.drawable.mechanic,R.drawable.party,R.drawable.pathology,R.drawable.plumber,
-                R.drawable.tailor,R.drawable.weeding_planner};
-        Resources res=context.getResources();
-        String[] serviceName=res.getStringArray(R.array.service_name);
-        for(int i=0;i<=12;i++)
-        {
-            ServiceImages tempCountry=new ServiceImages(serviceImages[i],serviceName[i]);
-            list.add(tempCountry);
-        }
+        this.list=list;
+        //inflating xml for each row only once (or optimization in RecyclerView )
+        setLayout=LayoutInflater.from(context);//inflating single_item_grid_view.xml so as to create a new viewHolder and which should be constructed
 
 
     }
-
+//when a new row is displayed onCreateViewHolder() is called
     @Override
-    public myViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public myViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {//method is called when a recycler view needs a new recyclerView.Viewholder of the given type to represent an item
 
-        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_item_gridview, null);
-        myViewHolder rcv = new myViewHolder(layoutView);
+        View rootView=setLayout.inflate(R.layout.single_item_gridview,parent,false);//view(variable) is a root of single_item_gridview.xml eg relativeLayotu in single_item_gridview.xml
+        myViewHolder holder = new myViewHolder(rootView);//rootView is passed to myViewHolder constructor
 
 
-        return rcv;
+        return holder;
 
 
     }
-
+     //onBindViewHolder() is called for setting the data that should correspond to current row
+    //holder for the setting the data for a current position
+    //position current position
     @Override
     public void onBindViewHolder(myViewHolder holder, int position) {
-        ServiceImages temp =list.get(position);
-        holder.serviceimage.setImageResource(temp.serviceImages);
-        holder.servicename.setText(temp.serviceName);
+        ServiceDetails current =list.get(position);
+        holder.serviceimage.setImageResource(current.serviceImages);
+        holder.servicename.setText(current.serviceName);
 
 
     }
@@ -215,7 +234,7 @@ class serviceDetailsAdapter extends RecyclerView.Adapter<serviceDetailsAdapter.m
     class myViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         ImageView serviceimage;
         TextView servicename;
-        public myViewHolder(View itemView)
+        public myViewHolder(View itemView)//finding the image and text view from single_item_gridview.xml by using rootView which is passed from oncreateViewholder()
         {
             super(itemView);
             serviceimage=(ImageView)itemView.findViewById(R.id.serviceimage);
