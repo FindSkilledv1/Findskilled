@@ -12,7 +12,6 @@
     <string name="location_updated_message">updated message successfully</string>
 
 
-
     <string-array name="service_name">
         <item>carpenter</item>
         <item>building construction</item>

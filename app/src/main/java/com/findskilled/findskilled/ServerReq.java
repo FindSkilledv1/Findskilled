@@ -16,10 +16,10 @@ import java.net.URL;
  */
 public class ServerReq {
 
-    static String stream=null;
+    static String stream;
     public String getLocalityName(String cityName) throws IOException {
      try{
-        URL url = new URL("https://www.findskilled.in/findskilledAApp/get_locality.php?city_name="+cityName);
+        URL url = new URL("http://www.findskilled.in/findskilledAApp/get_locality.php?city_name="+cityName);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         //check the connection status
         if(urlConnection.getResponseCode() == 200) {

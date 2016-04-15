@@ -10,7 +10,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
-        app:popupTheme="@style/AppTheme.PopupOverlay" />
+        app:popupTheme="@style/AppTheme.PopupOverlay" >
+        <TextView
+            android:id="@+id/localityTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="hello"
+            android:background="@drawable/rounded_corner"
+            android:padding="5dp"
+            android:drawableRight="@drawable/ic_action"
+            android:textColor="@color/colorPrimary"/>
+
+
+
+    </android.support.v7.widget.Toolbar>
     <!--<android.support.v4.widget.DrawerLayout-->
         <!--android:id="@+id/drawer_layout"-->
         <!--android:layout_below="@+id/toolbar"-->
@@ -23,19 +36,12 @@
         android:orientation="vertical"
         android:layout_below="@+id/toolbar"
         android:layout_height="match_parent">
-    <ScrollView
-        android:id="@+id/scroll"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
-        >
 
     <RelativeLayout
         android:id="@+id/rlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_below="@+id/toolbar"
        >
         <com.viewpagerindicator.CirclePageIndicator
             android:id="@+id/indicator"
@@ -52,10 +58,10 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/serviceList"
             android:layout_width="match_parent"
-            android:layout_height="130dp"
+            android:layout_height="wrap_content"
             android:horizontalSpacing="5dp"
             android:padding="4dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="0dp"
             android:verticalSpacing="2dp"
 
             android:scrollbars="horizontal"
@@ -75,31 +81,13 @@
             android:layout_alignParentTop="true">
         </android.support.v4.view.ViewPager>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="category"
-            android:textSize="40sp"
-            android:id="@+id/textView2"
-            android:layout_below="@+id/indicator"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignBottom="@+id/button" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="More"
-            android:textSize="20sp"
-            android:background="@color/colorPrimary"
-            android:id="@+id/button"
-            android:layout_below="@+id/indicator"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+
+
 
 
     </RelativeLayout>
-    </ScrollView>
+
     </RelativeLayout>
     <!--<fragment-->
             <!--android:id="@+id/drawer_fragment"-->

@@ -41,13 +41,14 @@ public class HomePage extends AppCompatActivity {
     private String[] category=null;
     GridLayoutManager GridlManager;//gridView manager for RecyclerView
     serviceDetailsAdapter adapter;
+    private TextView localityTitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_appbar);
         service=(RecyclerView)findViewById(R.id.serviceList);
-        GridlManager=new GridLayoutManager(HomePage.this,6);//fist parameter for context and second for number of columns
-
+        GridlManager=new GridLayoutManager(HomePage.this,2);//fist parameter for context and second for number of columns
+        localityTitle=(TextView)findViewById(R.id.localityTitle);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -57,32 +58,20 @@ public class HomePage extends AppCompatActivity {
         adapter =new serviceDetailsAdapter(this,getData());//setting the adapter for recyclerView
         service.setAdapter(adapter);
         service.setLayoutManager(GridlManager);//setting the layout for recylcerView
-
-
-        category = getResources().getStringArray(R.array.service_name);
-        SpinnerAdapter spinnerAdapter= ArrayAdapter.createFromResource(getApplicationContext(),R.array.service_name,R.layout.spinner_dropdown_item);
-        Spinner navigationSpinner=new Spinner(getSupportActionBar().getThemedContext());
-        navigationSpinner.setAdapter(spinnerAdapter);
-        toolbar.addView(navigationSpinner, 0);
-
-        navigationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        localityTitle.setText("clement town");
+        localityTitle.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                Toast.makeText(HomePage.this,
-                        "you selected: " + category[position],
-                        Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+            public void onClick(View v) {
+                Intent main = new Intent(HomePage.this,LocalityList.class);
+                startActivity(main);
             }
         });
 
+        category = getResources().getStringArray(R.array.service_name);
+
 //        NavigationDrawerFragment drawerFragment=(NavigationDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.drawer_fragment);
 
-//        drawerFragment.setUp(R.id.drawer_fragment,(DrawerLayout)findViewById(R.id.drawer_layout), toolbar);
+//       drawerFragment.setUp(R.id.drawer_fragment,(DrawerLayout)findViewById(R.id.drawer_layout), toolbar);
 
         init();
     }

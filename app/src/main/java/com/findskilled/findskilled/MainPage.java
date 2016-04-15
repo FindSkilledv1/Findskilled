@@ -49,16 +49,16 @@ import java.util.Locale;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class MainPage extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, ResultCallback<LocationSettingsResult> {
-
+    //   SweetAlertDialog pDialog;
     //   private Button golocation;
-    String cityName;
+   private String cityName;
     ArrayList<String> localitylist;
     AutoCompleteTextView locality;
     //bydefault keep the value as false
     Boolean isInternetPresent = false;
     //to check whether internet is available or not
     InternetConnectionDetector icd;
-    private SweetAlertDialog pDialog;
+
     private Button gobtn;
     //  private TextView txt_location;
 //    protected TextView txt_latitude, txt_longitude, mLastUpdateTimeTextView, tv_pincode,
@@ -121,16 +121,17 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
     @Override
     protected void onStart() {
         super.onStart();
-//        pDialog  = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYP//        pDialog.setTitleText("Loading");
+//        pDialog  = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+//        pDialog.setTitleText("Loading");
 //        pDialog.setCancelable(false);
 //        pDialog.show();
         GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
 //below code is depriciated
 //       int resultCode=GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
-        int resultCode=googleAPI.isGooglePlayServicesAvailable(getApplicationContext());
+        int resultCode = googleAPI.isGooglePlayServicesAvailable(getApplicationContext());
         if (resultCode == ConnectionResult.SUCCESS) {
-// Toast.makeText(getApplicationContext(),
-// "isGooglePlayServicesAvailable SUCCESS",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),
+                    "isGooglePlayServicesAvailable SUCCESS", Toast.LENGTH_LONG).show();
             mGoogleApiClient.connect();
         } else {
             googleAPI.getErrorDialog(this, resultCode, RQS_GooglePlayServices);
@@ -155,7 +156,6 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
     @Override
     protected void onPause() {
         super.onPause();
-
         // Stop location updates to save battery, but don't disconnect the GoogleApiClient object.
         if (mGoogleApiClient.isConnected()) {
             stopLocationUpdates();
@@ -177,8 +177,7 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
         setContentView(R.layout.activity_main_page);
         localitylist = new ArrayList<>();
         localityName = (AutoCompleteTextView) findViewById(R.id.searchlocality);
-//        Connect cnct = new Connect();
-//        cnct.execute();
+
 
 
         //      golocation = (Button) findViewById(R.id.location);
@@ -217,13 +216,6 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
         checkLocationSettings();
 
 
-//        golocation.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
-//
 
     }
 
@@ -368,20 +360,20 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
     public void onConnectionFailed(ConnectionResult connectionResult) {
 // Refer to the javadoc for ConnectionResult to see what error codes might be returned in
 // onConnectionFailed.
-        SweetAlertDialog pDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-                .setTitleText("Oops...")
-                .setContentText("Something went wrong!")
-                .setConfirmText("Ok.")
-                .showCancelButton(true)
-                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sDialog) {
-                        sDialog.cancel();
-                        finish();
-                    }
-                });
-
-        pDialog.show();
+//        SweetAlertDialog pDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+//                .setTitleText("Oops...")
+//                .setContentText("Something went wrong!")
+//                .setConfirmText("Ok.")
+//                .showCancelButton(true)
+//                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+//                    @Override
+//                    public void onClick(SweetAlertDialog sDialog) {
+//                        sDialog.cancel();
+//                        finish();
+//                    }
+//                });
+//
+//        pDialog.show();
 
 
         //Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = " + connectionResult.getErrorCode());
@@ -458,8 +450,11 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
             icd = new InternetConnectionDetector(getApplicationContext());
             isInternetPresent = icd.isConnectingToInternet();
             if (isInternetPresent) {
-
+                //        pDialog.dismiss();
                 updateCityAndPincode(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+                Connect cnct = new Connect();
+                cnct.execute();
+
             } else {
 
                 SweetAlertDialog pDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
@@ -487,13 +482,13 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
      * <p/>
      * And yes the Geocoder will not work unless you have data connection or wifi connected to internet.
      */
-    private void updateCityAndPincode(double latitude, double longitude) {
+    public void updateCityAndPincode(double latitude, double longitude) {
         try {
             Geocoder gcd = new Geocoder(MainPage.this, Locale.getDefault());
             List<Address> addresses = gcd.getFromLocation(latitude, longitude, 1);
             if (addresses.size() > 0) {
                 cityName = ("" + addresses.get(0).getLocality()).toString();
-                tv_city.setText("" + addresses.get(0).getLocality());
+                tv_city.setText(cityName);
 
 //                tv_pincode.setText("Pincode="+addresses.get(0).getPostalCode());
 // System.out.println(addresses.get(0).getLocality());
@@ -506,56 +501,53 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        pDialog.dismiss();
-        finish();
-    }
-}
-//    class Connect extends AsyncTask<Void,Void,Void>
-//    {
-//        @Override
-//        protected void onPostExecute(Void aVoid) {
-//            super.onPostExecute(aVoid);
-//            Toast.makeText(MainPage.this,""+cityName,Toast.LENGTH_LONG).show();
-//            ArrayAdapter<String> adapter=new ArrayAdapter<String>(MainPage.this,android.R.layout.simple_dropdown_item_1line,localitylist);
-//            localityName.setAdapter(adapter);
-//
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//            ServerReq m = new ServerReq();
-//            String a;
-//            try {
-//                a=m.getLocalityName(cityName);
-//                JsonResponce(a);
-//            } catch (Exception e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            }
-//
-//            return null;
-//        }
-//    }
-//    public void JsonResponce(String s) throws JSONException {
-//
-//
-//
-//        JSONObject json=new JSONObject(s);
-//        JSONArray jarray=json.getJSONArray("user");
-//
-//
-//        for(int i=0;i<=jarray.length();i++)
-//        {
-//
-//            JSONObject jobj =jarray.getJSONObject(i);
-//
-//
-//            localitylist.add(jobj.getString("id"));
-//            localitylist.add(jobj.getString("name"));
-//
-//
-//        }
-//
-//    }
-//}
+        //    pDialog.dismiss();
 
+    }
+
+    class Connect extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Toast.makeText(MainPage.this,""+cityName, Toast.LENGTH_LONG).show();
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainPage.this, android.R.layout.simple_dropdown_item_1line, localitylist);
+            localityName.setAdapter(adapter);
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            ServerReq m = new ServerReq();
+            String a;
+            try {
+                a = m.getLocalityName(cityName);
+                JsonResponce(a);
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+        public void JsonResponce(String s) throws JSONException {
+
+
+                     JSONObject json = new JSONObject(s);
+                JSONArray jarray = json.getJSONArray("user");
+
+
+                for (int i = 0; i <= jarray.length(); i++) {
+
+                    JSONObject jobj = jarray.getJSONObject(i);
+
+
+                    localitylist.add(jobj.getString("id"));
+                    localitylist.add(jobj.getString("name"));
+
+
+                }
+
+        }
+     }
+}
