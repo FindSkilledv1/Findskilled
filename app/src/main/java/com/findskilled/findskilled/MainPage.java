@@ -16,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -52,7 +53,7 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
     //   SweetAlertDialog pDialog;
     //   private Button golocation;
    private String cityName;
-    ArrayList<String> localitylist;
+    ArrayList<String> localitylist,listID;
     AutoCompleteTextView locality;
     //bydefault keep the value as false
     Boolean isInternetPresent = false;
@@ -72,14 +73,14 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
     /**
      * The desired interval for location updates. Inexact. Updates may be more or less frequent.
      */
-    public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+  //  public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
 
     /**
      * The fastest rate for active location updates. Exact. Updates will never be more frequent
      * than this value.
      */
-    public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS =
-            UPDATE_INTERVAL_IN_MILLISECONDS / 2;
+//    public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS =
+//            UPDATE_INTERVAL_IN_MILLISECONDS / 2;
     // Keys for storing activity state in the Bundle.
     protected final static String KEY_REQUESTING_LOCATION_UPDATES = "requesting-location-updates";
     protected final static String KEY_LOCATION = "location";
@@ -121,45 +122,45 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
     @Override
     protected void onStart() {
         super.onStart();
-//        pDialog  = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
-//        pDialog.setTitleText("Loading");
-//        pDialog.setCancelable(false);
-//        pDialog.show();
+
         GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
-//below code is depriciated
-//       int resultCode=GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
+
         int resultCode = googleAPI.isGooglePlayServicesAvailable(getApplicationContext());
+
         if (resultCode == ConnectionResult.SUCCESS) {
-            Toast.makeText(getApplicationContext(),
-                    "isGooglePlayServicesAvailable SUCCESS", Toast.LENGTH_LONG).show();
+//            Toast.makeText(getApplicationContext(),
+//                    "isGooglePlayServicesAvailable SUCCESS", Toast.LENGTH_LONG).show();
             mGoogleApiClient.connect();
         } else {
-            googleAPI.getErrorDialog(this, resultCode, RQS_GooglePlayServices);
+
+//            Toast.makeText(getApplicationContext(),
+//                    "isGooglePlayServicesAvailable FAIL", Toast.LENGTH_LONG).show();
+            googleAPI.getErrorDialog(this, resultCode, RQS_GooglePlayServices).show();
 
         }
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        // Within {@code onPause()}, we pause location updates, but leave the
-// connection to GoogleApiClient intact. Here, we resume receiving
-// location updates if the user has requested them.
-        if (mGoogleApiClient.isConnected() && mRequestingLocationUpdates) {
-// Toast.makeText(MainPage.this, "location was already on so detecting location now", Toast.LENGTH_SHORT).show();
-            startLocationUpdates();
-        }
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//
+//        // Within {@code onPause()}, we pause location updates, but leave the
+//// connection to GoogleApiClient intact. Here, we resume receiving
+//// location updates if the user has requested them.
+////        if (mGoogleApiClient.isConnected() && mRequestingLocationUpdates) {
+////// Toast.makeText(MainPage.this, "location was already on so detecting location now", Toast.LENGTH_SHORT).show();
+////            startLocationUpdates();
+////        }
+//    }
 
     @Override
     protected void onPause() {
         super.onPause();
         // Stop location updates to save battery, but don't disconnect the GoogleApiClient object.
-        if (mGoogleApiClient.isConnected()) {
-            stopLocationUpdates();
-        }
+//        if (mGoogleApiClient.isConnected()) {
+//            stopLocationUpdates();
+//        }
     }
 
     @Override
@@ -176,7 +177,16 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
         localitylist = new ArrayList<>();
+        listID = new ArrayList<>();
         localityName = (AutoCompleteTextView) findViewById(R.id.searchlocality);
+        localityName.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+               Toast.makeText(MainPage.this,""+listID.get(position),Toast.LENGTH_LONG).show();
+                final String localityID=listID.get(position);
+            }
+        });
+
 
 
 
@@ -204,6 +214,7 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
         mLastUpdateTime = "";
 // Kick off the process of building the GoogleApiClient, LocationRequest, and
 // LocationSettingsRequest objects.
+
 //step 1
 
         //initializing the boolean value after checking the presence of internet
@@ -218,7 +229,6 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
 
 
     }
-
     //step 1
     protected synchronized void buildGoogleApiClient() {
         //Log.i(TAG, "Building GoogleApiClient");
@@ -236,10 +246,10 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
 // inexact. You may not receive updates at all if no location sources are available, or
 // you may receive them slower than requested. You may also receive updates faster than
 // requested if other applications are requesting location at a faster interval.
-        mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
-// Sets the fastest rate for active location updates. This interval is exact, and your
-// application will never receive updates faster than this value.
-        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
+//        mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
+//// Sets the fastest rate for active location updates. This interval is exact, and your
+//// application will never receive updates faster than this value.
+//        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
@@ -385,7 +395,7 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
         switch (status.getStatusCode()) {
             case LocationSettingsStatusCodes.SUCCESS:
                 //    Log.i(TAG, "All location settings are satisfied.");
-                Toast.makeText(MainPage.this, "Location is already on.", Toast.LENGTH_SHORT).show();
+      //          Toast.makeText(MainPage.this, "Location is already on.", Toast.LENGTH_SHORT).show();
                 startLocationUpdates();
                 break;
             case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
@@ -542,7 +552,7 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
                     JSONObject jobj = jarray.getJSONObject(i);
 
 
-                    localitylist.add(jobj.getString("id"));
+                    listID.add(jobj.getString("id"));
                     localitylist.add(jobj.getString("name"));
 
 

@@ -66,11 +66,14 @@ public class HomePage extends AppCompatActivity {
                 startActivity(main);
             }
         });
-
+        Intent m=getIntent();
+        m.getExtras();
+        String a =m.getStringExtra("name");
+        localityTitle.setText(a);
         category = getResources().getStringArray(R.array.service_name);
 
 //        NavigationDrawerFragment drawerFragment=(NavigationDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.drawer_fragment);
-
+//
 //       drawerFragment.setUp(R.id.drawer_fragment,(DrawerLayout)findViewById(R.id.drawer_layout), toolbar);
 
         init();
@@ -181,7 +184,7 @@ class ServiceDetails
 class serviceDetailsAdapter extends RecyclerView.Adapter<serviceDetailsAdapter.myViewHolder> {
     private LayoutInflater setLayout;
     Context context;
-List<ServiceDetails> list= Collections.emptyList();//Collections.emptyList() for avoiding the null pointer exception
+    List<ServiceDetails> list= Collections.emptyList();//Collections.emptyList() for avoiding the null pointer exception
     serviceDetailsAdapter(Context context,List<ServiceDetails> list)
     {
         this.context=context;
@@ -231,6 +234,7 @@ List<ServiceDetails> list= Collections.emptyList();//Collections.emptyList() for
         }
         @Override
         public void onClick(View v) {
+
         }
     }
 }
