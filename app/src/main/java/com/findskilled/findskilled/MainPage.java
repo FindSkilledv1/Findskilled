@@ -176,14 +176,37 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
+
         localitylist = new ArrayList<>();
+        gobtn = (Button) findViewById(R.id.go);
+
         listID = new ArrayList<>();
+
+        if(localityName==null)
+        {
+            gobtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                   localityName.setError("Field can not be empty");
+                }
+            });
+        }
         localityName = (AutoCompleteTextView) findViewById(R.id.searchlocality);
         localityName.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                Toast.makeText(MainPage.this,""+listID.get(position),Toast.LENGTH_LONG).show();
-                final String localityID=listID.get(position);
+                 String localityID=listID.get(position);
+               final  String selectedLocalityName=localitylist.get(position);
+                gobtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent m = new Intent(MainPage.this, HomePage.class);
+                        m.putExtra("autocompleteLocalityName",selectedLocalityName);
+                        startActivity(m);
+                    }
+                });
+
             }
         });
 
@@ -196,13 +219,9 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
 //        txt_longitude = (TextView) findViewById(R.id.longitude);
 //        mLastUpdateTimeTextView = (TextView) findViewById(R.id.mlastupdatetime);
         tv_city = (TextView) findViewById(R.id.city);
-        gobtn = (Button) findViewById(R.id.go);
-        gobtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainPage.this, HomePage.class));
-            }
-        });
+
+
+
 
 //        tv_pincode = (TextView) findViewById(R.id.pincode);
         //setlabels

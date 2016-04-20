@@ -35,9 +35,14 @@ public class LocalityList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("Locality");
+        Intent m = getIntent();
+        Toast.makeText(this,"intennnnnt   "+m,Toast.LENGTH_LONG).show();
         localityList=(ListView)findViewById(R.id.localityListing);
+
         localityListing=new ArrayList<>();
+
         listid=new ArrayList<>();
+
         icd=new InternetConnectionDetector(getApplicationContext());
         isInternetPresent=icd.isConnectingToInternet();
         if(isInternetPresent) {

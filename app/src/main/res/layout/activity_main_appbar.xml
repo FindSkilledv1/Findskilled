@@ -24,23 +24,24 @@
 
 
     </android.support.v7.widget.Toolbar>
-    <android.support.v4.widget.DrawerLayout
-        android:id="@+id/drawer_layout"
-        android:layout_below="@+id/toolbar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-    >
-    <RelativeLayout
-
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_below="@+id/toolbar"
-        android:layout_height="match_parent">
-
-    <RelativeLayout
-        android:id="@+id/rlayout"
+    <!--<android.support.v4.widget.DrawerLayout-->
+        <!--android:id="@+id/drawer_layout"-->
+        <!--android:layout_below="@+id/toolbar"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+    <!-->-->
+    <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:layout_below="@+id/toolbar">
+
+
+    <RelativeLayout
+        android:id="@+id/rlayouts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
        >
         <com.viewpagerindicator.CirclePageIndicator
@@ -58,7 +59,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/serviceList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="600dp"
             android:horizontalSpacing="5dp"
             android:padding="4dp"
             android:layout_marginTop="0dp"
@@ -67,7 +68,9 @@
             android:scrollbarAlwaysDrawVerticalTrack="true"
             android:layout_below="@+id/indicator"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
         <android.support.v4.view.ViewPager
             android:id="@+id/pager"
@@ -81,22 +84,34 @@
 
 
 
+        <Button
+            android:id="@+id/browseMoreButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Browse More For Category"
+            android:background="@drawable/rounded_corner"
+            android:textColor="@color/colorPrimary"
+            android:layout_alignBottom="@+id/serviceList"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
 
 
 
     </RelativeLayout>
+    </ScrollView>
 
-    </RelativeLayout>
-    <fragment
-            android:id="@+id/drawer_fragment"
-            android:name="com.findskilled.findskilled.NavigationDrawerFragment"
-            tools:layout="@layout/fragment_navigation_drawer"
-            android:layout_width="280dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            app:layout="@layout/fragment_navigation_drawer"/>
 
-    </android.support.v4.widget.DrawerLayout>
+    <!--<fragment-->
+            <!--android:id="@+id/drawer_fragment"-->
+            <!--android:name="com.findskilled.findskilled.NavigationDrawerFragment"-->
+            <!--tools:layout="@layout/fragment_navigation_drawer"-->
+            <!--android:layout_width="280dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_gravity="start"-->
+            <!--app:layout="@layout/fragment_navigation_drawer"/>-->
+
+    <!--</android.support.v4.widget.DrawerLayout>-->
 
 
 

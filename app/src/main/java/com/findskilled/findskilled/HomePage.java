@@ -46,30 +46,54 @@ public class HomePage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_appbar);
+
         service=(RecyclerView)findViewById(R.id.serviceList);
+
         GridlManager=new GridLayoutManager(HomePage.this,2);//fist parameter for context and second for number of columns
+
         localityTitle=(TextView)findViewById(R.id.localityTitle);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
         adapter =new serviceDetailsAdapter(this,getData());//setting the adapter for recyclerView
+
         service.setAdapter(adapter);
         service.setLayoutManager(GridlManager);//setting the layout for recylcerView
-        localityTitle.setText("clement town");
+
+        String localityName="clement town";
+
+
         localityTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent main = new Intent(HomePage.this,LocalityList.class);
-                startActivity(main);
+                Intent intent = new Intent(HomePage.this, LocalityList.class);
+                intent.replaceExtras(new Bundle());
+                intent.setAction("");
+                intent.setData(null);
+                intent.setFlags(0);
+                startActivity(intent);
+
             }
         });
-        Intent m=getIntent();
-        m.getExtras();
-        String a =m.getStringExtra("name");
-        localityTitle.setText(a);
+//      We are receiving intent to set a title from MainPage and LocalityList page as well
+        Intent m = getIntent();
+        final String b = m.getStringExtra("autocompleteLocalityName");
+       Toast.makeText(this,"Intent     "+b,Toast.LENGTH_LONG).show();
+        if(b!=null) {
+            localityTitle.setText("  "+b);
+
+        }
+        else
+        {
+
+            final  String a = m.getStringExtra("localityName");
+            localityTitle.setText("  "+a);
+
+        }
+
         category = getResources().getStringArray(R.array.service_name);
 
 //        NavigationDrawerFragment drawerFragment=(NavigationDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.drawer_fragment);
