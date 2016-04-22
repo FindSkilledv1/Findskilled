@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -42,10 +43,13 @@ public class HomePage extends AppCompatActivity {
     GridLayoutManager GridlManager;//gridView manager for RecyclerView
     serviceDetailsAdapter adapter;
     private TextView localityTitle;
+    private Button BrowseCategory;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_appbar);
+
+        BrowseCategory=(Button)findViewById(R.id.browseMoreButton);
 
         service=(RecyclerView)findViewById(R.id.serviceList);
 
@@ -78,10 +82,10 @@ public class HomePage extends AppCompatActivity {
 
             }
         });
-//      We are receiving intent to set a title from MainPage and LocalityList page as well
-        Intent m = getIntent();
+//       We are receiving intent to set a title from MainPage and LocalityList page as well
+        final Intent m = getIntent();
         final String b = m.getStringExtra("autocompleteLocalityName");
-       Toast.makeText(this,"Intent     "+b,Toast.LENGTH_LONG).show();
+//       Toast.makeText(this,"Intent     "+b,Toast.LENGTH_LONG).show();
         if(b!=null) {
             localityTitle.setText("  "+b);
 
@@ -94,6 +98,18 @@ public class HomePage extends AppCompatActivity {
 
         }
 
+//      Browse category button fore more categories display
+        BrowseCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mainns=new Intent(HomePage.this,CategoryList.class);
+                String a= localityTitle.getText().toString();
+                Toast.makeText(HomePage.this,"Title     "+a,Toast.LENGTH_LONG).show();
+                mainns.putExtra("Name",a);
+                startActivity(mainns);
+            }
+        });
+
         category = getResources().getStringArray(R.array.service_name);
 
 //        NavigationDrawerFragment drawerFragment=(NavigationDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.drawer_fragment);
@@ -105,14 +121,14 @@ public class HomePage extends AppCompatActivity {
     public static List<ServiceDetails> getData()//collection of data to display in recyclerView
     {
           List<ServiceDetails> data=new ArrayList<>();
-        //  Context context=null;
+//          Context context=null;
 
 
         int[] serviceImages={R.drawable.carpenter,R.drawable.civil_works,R.drawable.computer_repair,
                 R.drawable.doctor,R.drawable.driver,R.drawable.electrician,R.drawable.fabrication,R.drawable.mechanic,R.drawable.weeding_planner
         };
-       // Resources res=context.getResources();
-        //String[] serviceName=res.getStringArray(R.array.service_name);
+//        Resources res=context.getResources();
+//        String[] serviceName=res.getStringArray(R.array.service_name);
         String[] serviceName={"carpenter","construction","computer repair","doctor","driver","electrical","febrication","mechanic","wedding planner"};
         for(int i=0;i<=8;i++)
         {
@@ -125,7 +141,7 @@ public class HomePage extends AppCompatActivity {
     }
 
     private void init() {
-  //    Toast.makeText(HomePage.this, ""+IMAGES.length, Toast.LENGTH_SHORT).show();
+
         mPager = (ViewPager) findViewById(R.id.pager);
         for(int i=0;i<IMAGES.length;i++)
         {

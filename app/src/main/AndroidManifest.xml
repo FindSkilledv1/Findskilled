@@ -25,7 +25,8 @@
             android:name=".HomePage"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".EmployeesResult" />
-        <activity android:name=".LocalityList"></activity>
+        <activity android:name=".LocalityList" />
+        <activity android:name=".CategoryList"></activity>
     </application>
 
 </manifest>

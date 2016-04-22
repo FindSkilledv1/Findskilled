@@ -54,4 +54,41 @@ public class ServerReq {
 
 
     }
+    public String getCategory(String localityId)
+    {
+        try{
+            URL url = new URL("http://www.findskilled.in/findskilledAApp/category.php");
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            //check the connection status
+            if(urlConnection.getResponseCode() == 200) {
+                // if response code = 200 ok
+                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+                // Read the BufferedInputStream
+                BufferedReader r = new BufferedReader(new InputStreamReader(in));
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = r.readLine()) != null) {
+                    sb.append(line);
+                }
+                stream = sb.toString();
+
+                // End reading...............
+
+                // Disconnect the HttpURLConnection
+                urlConnection.disconnect();
+            } else {
+                // Do something
+            }
+        }catch (MalformedURLException e){
+            e.printStackTrace();
+        }catch(IOException e){
+            e.printStackTrace();
+        }finally {
+
+
+        }
+        // Return the data from specified url
+        return stream;
+
+    }
 }

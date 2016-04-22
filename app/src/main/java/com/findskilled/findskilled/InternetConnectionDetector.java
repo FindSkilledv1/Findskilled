@@ -3,6 +3,7 @@ package com.findskilled.findskilled;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.widget.Toast;
 
 /**
  * Created by lenovo on 14-03-2016.
@@ -17,17 +18,27 @@ public class InternetConnectionDetector {
 
     public boolean isConnectingToInternet(){
         ConnectivityManager connectivity = (ConnectivityManager) _context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivity != null)
-        {
-            NetworkInfo[] info = connectivity.getAllNetworkInfo();
-            if (info != null)
-                for (int i = 0; i < info.length; i++)
-                    if (info[i].getState() == NetworkInfo.State.CONNECTED)
-                    {
-                        return true;
-                    }
 
-        }
-        return false;
+            NetworkInfo activeNetworkinfo = connectivity.getActiveNetworkInfo();
+            if (activeNetworkinfo != null) {
+                if(activeNetworkinfo.getType()==ConnectivityManager.TYPE_WIFI)
+                {
+//                    Toast.makeText(_context, activeNetworkinfo.getTypeName(), Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                else if(activeNetworkinfo.getType()==ConnectivityManager.TYPE_MOBILE)
+                {
+
+//                    Toast.makeText(_context, activeNetworkinfo.getTypeName(), Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+
+            }
+            return false;
     }
 }

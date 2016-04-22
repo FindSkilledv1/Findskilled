@@ -42,4 +42,5 @@ dependencies {
     compile 'cn.pedant.sweetalert:library:1.3'
     compile 'com.google.android.gms:play-services:8.4.0'
     compile 'com.mcxiaoke.volley:library:1.0.19'
+    compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
 }
