@@ -1,4 +1,4 @@
-package com.findskilled.findskilled;
+package Network;
 
 import android.graphics.Bitmap;
 import android.util.LruCache;
@@ -6,6 +6,7 @@ import android.util.LruCache;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.findskilled.findskilled.MyApplication;
 
 /**
  * Created by lenovo on 16-03-2016.
@@ -17,6 +18,7 @@ public class VolleySingleton {
     private static VolleySingleton sInstance=null;
     private RequestQueue mRequestQueue;
     private ImageLoader mimageLoader;
+    //making private so that no other class can use our volley class
     private VolleySingleton()
     {
     mRequestQueue= Volley.newRequestQueue(MyApplication.getAppContext());
@@ -37,7 +39,7 @@ public class VolleySingleton {
         });
     }
 //    static method to return the instance of our class volley singleton
-//this method will return the object of type Volleysingleton
+//    this method will return the object of type Volleysingleton
     public static VolleySingleton getInstance() {
         if (sInstance == null) {
             sInstance = new VolleySingleton();

@@ -10,7 +10,7 @@
     tools:context="com.findskilled.findskilled.CategoryList">
 
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/categoryList"

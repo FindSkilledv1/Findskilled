@@ -246,9 +246,9 @@ class serviceDetailsAdapter extends RecyclerView.Adapter<serviceDetailsAdapter.m
 
 
     }
-     //onBindViewHolder() is called for setting the data that should correspond to current row
-    //holder for the setting the data for a current position
-    //position current position
+//     onBindViewHolder() is called for setting the data that should correspond to current row
+//     holder for the setting the data for a current position
+//     position current position
     @Override
     public void onBindViewHolder(myViewHolder holder, int position) {
         ServiceDetails current =list.get(position);
