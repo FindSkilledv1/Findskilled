@@ -22,7 +22,6 @@
         android:src="@drawable/carpenter"
         android:layout_alignParentTop="true"
         android:scaleType="centerCrop"
-        android:background="@color/default_title_indicator_footer_color"
         android:foregroundGravity="center"
         android:layout_centerHorizontal="true"
 

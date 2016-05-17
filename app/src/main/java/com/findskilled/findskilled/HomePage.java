@@ -24,7 +24,6 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.viewpagerindicator.CirclePageIndicator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -32,11 +31,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class HomePage extends AppCompatActivity {
-//    private RecyclerView recyclerView;
-    private static  ViewPager mPager;
-    private static int currentPage = 0;
-    private static int NUM_PAGES = 0;
-    private static final Integer[] IMAGES={R.drawable.find2,R.drawable.find1,R.drawable.find3};
+
     private ArrayList<Integer> ImagesArray = new ArrayList<Integer>();
     private RecyclerView service;
     private String[] category=null;
@@ -58,6 +53,7 @@ public class HomePage extends AppCompatActivity {
         localityTitle=(TextView)findViewById(R.id.localityTitle);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setting up the toolbar as an actionbar/appbar in android passing the object of the toolbar
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -116,7 +112,6 @@ public class HomePage extends AppCompatActivity {
 //
 //       drawerFragment.setUp(R.id.drawer_fragment,(DrawerLayout)findViewById(R.id.drawer_layout), toolbar);
 
-        init();
     }
     public static List<ServiceDetails> getData()//collection of data to display in recyclerView
     {
@@ -140,72 +135,6 @@ public class HomePage extends AppCompatActivity {
 
     }
 
-    private void init() {
-
-        mPager = (ViewPager) findViewById(R.id.pager);
-        for(int i=0;i<IMAGES.length;i++)
-        {
-            ImagesArray.add(IMAGES[i]);
-
-        }
-
-
-        mPager.setAdapter(new SlidingImageAdapter(HomePage.this,ImagesArray));
-
-
-        CirclePageIndicator indicator = (CirclePageIndicator)
-                findViewById(R.id.indicator);
-
-        indicator.setViewPager(mPager);
-
-       final float density = getResources().getDisplayMetrics().density;
-
-//Set circle indicator radius
-        indicator.setRadius(5 * density);
-
-        NUM_PAGES =IMAGES.length;
-
-        // Auto start of viewpager
-
-        final Handler handler = new Handler();
-        final Runnable Update = new Runnable() {
-            public void run() {
-                if (currentPage == NUM_PAGES) {
-                    currentPage = 0;
-                   // mPager.setCurrentItem(currentPage, true);
-                }
-                mPager.setCurrentItem(currentPage++, true);
-            }
-        };
-        Timer swipeTimer = new Timer();
-        swipeTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                handler.post(Update);
-            }
-        }, 5000, 3000);
-        // Pager listener over indicator
-        indicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                currentPage = position;
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-
-        });
-
-    }
 
 }
 //class information as a service details

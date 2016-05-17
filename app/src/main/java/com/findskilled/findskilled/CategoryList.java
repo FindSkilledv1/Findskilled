@@ -55,24 +55,24 @@ public class CategoryList extends AppCompatActivity {
 
         requestQueue=volleySingleton.getRequestQueue();
 
-        sendJsonRequest();
+//        sendJsonRequest();
 
 
 
 
     }
 
-    private void sendJsonRequest() {
-
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getRequestUrl(10), null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-
-            }
-        });
-
-
-    }
+//    private void sendJsonRequest() {
+//
+//        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getRequestUrl(10), null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//
+//            }
+//        });
+//
+//
+//    }
 
 
 //    private void JsonResp(String b) throws JSONException {
@@ -144,7 +144,7 @@ class categoryDetailsAdapter extends RecyclerView.Adapter<categoryDetailsAdapter
     public void onBindViewHolder(myViewHolders holder, int position) {
 
 //        holder.serviceimage.setImageResource(list.serviceImages);
-            holder.servicename.setText(list.);
+//            holder.servicename.setText(list.add());
 
 
     }

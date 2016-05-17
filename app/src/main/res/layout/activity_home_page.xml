@@ -5,15 +5,6 @@
 android:id="@+id/rlayout"
 android:layout_width="match_parent"
 android:layout_height="match_parent">
-    <com.viewpagerindicator.CirclePageIndicator
-    android:id="@+id/indicator"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="10dp"
-    app:centered="true"
-    app:fillColor="@color/default_circle_indicator_stroke_color"
-    app:pageColor="#ffffff"
-    />
 
     <android.support.v7.widget.RecyclerView
 
@@ -30,16 +21,6 @@ android:layout_height="match_parent">
         android:layout_alignParentStart="true"
         android:layout_gravity="left|bottom" />
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:background="@drawable/carpenter"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_gravity="right|top">
-    </android.support.v4.view.ViewPager>
 
 
 </FrameLayout>

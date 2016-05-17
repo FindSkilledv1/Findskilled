@@ -40,7 +40,6 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -64,7 +63,7 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
     //  private TextView txt_location;
 //    protected TextView txt_latitude, txt_longitude, mLastUpdateTimeTextView, tv_pincode,
     protected TextView tv_city;
-    protected static final String TAG = "MainActivity";
+//    protected static final String TAG = "MainActivity";
 
     /**
      * Constant used in the location settings dialog.
@@ -196,7 +195,7 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                Toast.makeText(MainPage.this,""+listID.get(position),Toast.LENGTH_LONG).show();
-                 String localityID=listID.get(position);
+//                 String localityID=listID.get(position);
                final  String selectedLocalityName=localitylist.get(position);
                 gobtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -224,7 +223,7 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
 
 
 //        tv_pincode = (TextView) findViewById(R.id.pincode);
-        //setlabels
+//        setlabels
         mLatitudeLabel = getResources().getString(R.string.latitude_lable);
         mLongitudeLabel = getResources().getString(R.string.longitude_lable);
         mLastUpdateTimeLabel = getResources().getString(R.string.lastUpdateTime);
@@ -234,13 +233,13 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
 // Kick off the process of building the GoogleApiClient, LocationRequest, and
 // LocationSettingsRequest objects.
 
-//step 1
+//        step 1
 
-        //initializing the boolean value after checking the presence of internet
+//        initializing the boolean value after checking the presence of internet
         buildGoogleApiClient();
-        //step 2
+//        step 2
         createLocationRequest();
-//step 3
+//        step 3
         buildLocationSettingsRequest();
 
         checkLocationSettings();
@@ -364,14 +363,13 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
             mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
             updateLocationUI();
-
         }
 
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.i(TAG, "Connection suspended");
+//        Log.i(TAG, "Connection suspended");
 
     }
 
@@ -413,13 +411,13 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
         final Status status = locationSettingsResult.getStatus();
         switch (status.getStatusCode()) {
             case LocationSettingsStatusCodes.SUCCESS:
-                //    Log.i(TAG, "All location settings are satisfied.");
-      //          Toast.makeText(MainPage.this, "Location is already on.", Toast.LENGTH_SHORT).show();
+//                    Log.i(TAG, "All location settings are satisfied.");
+//                Toast.makeText(MainPage.this, "Location is already on.", Toast.LENGTH_SHORT).show();
                 startLocationUpdates();
                 break;
             case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                //     Log.i(TAG, "Location settings are not satisfied. Show the user a dialog to" +
-                //             "upgrade location settings ");
+//                     Log.i(TAG, "Location settings are not satisfied. Show the user a dialog to" +
+//                             "upgrade location settings ");
                 try {
 // Show the dialog by calling startResolutionForResult(), and check the result
 // in onActivityResult().
@@ -428,12 +426,12 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
 //move to step 6 in onActivityResult to check what action user has taken on settings dialog
                     status.startResolutionForResult(MainPage.this, REQUEST_CHECK_SETTINGS);
                 } catch (IntentSender.SendIntentException e) {
-                    //       Log.i(TAG, "PendingIntent unable to execute request.");
+//                           Log.i(TAG, "PendingIntent unable to execute request.");
                 }
                 break;
             case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                // Log.i(TAG, "Location settings are inadequate, and cannot be fixed here. Dialog " +
-                //       "not created.");
+//                 Log.i(TAG, "Location settings are inadequate, and cannot be fixed here. Dialog " +
+//                       "not created.");
                 break;
         }
 
@@ -481,9 +479,12 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
             if (isInternetPresent) {
                 //        pDialog.dismiss();
                 updateCityAndPincode(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
-                Connect cnct = new Connect();
-                cnct.execute();
-
+                int flagg=0;
+                if(flagg==0) {
+                    Connect cnct = new Connect();
+                    cnct.execute();
+                    flagg++;
+                }
             } else {
 
                 SweetAlertDialog pDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
@@ -523,14 +524,14 @@ public class MainPage extends AppCompatActivity implements GoogleApiClient.Conne
 // System.out.println(addresses.get(0).getLocality());
             }
         } catch (Exception e) {
-            Log.e(TAG, "exception:" + e.toString());
+//            Log.e(TAG, "exception:" + e.toString());
         }
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        //    pDialog.dismiss();
+//            pDialog.dismiss();
 
     }
 
